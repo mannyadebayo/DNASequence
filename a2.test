@@ -1,0 +1,104 @@
+set_up | father | Male('1234')
+father.set_by_pos(0,1,'AG') | 'Assign nucleotide pairs to a position whithin the person's gene' | NoneType
+father.set_by_pos(1,1,'CT') | 'Assign nucleotide pairs to a position whithin the person's gene' | NoneType
+father.get_by_pos(0,1) |'Test if your previous assigment worked' | 'AG'
+father.set_marker('rs1234', 0, 1) | 'Assign a marker to a pair and position that has already been assigned | NoneType
+father.get_by_marker('rs1234') | 'Check if the marker returns the correct nucleotide pair' | 'AG'
+father.set_marker('rs4567', 1, 3) | 'Assign a marker to a pair and position that has not been assigned | NoneType
+father.set_by_marker('rs4567', 'TA') |'Assign nucleotides to the marker'| NoneType
+father.get_by_marker('rs3567')|'Test if the set_by_marker method works' | 'TA'
+father.get_by_pos(1,3)|'Test if the set_by_marker actually changes the genome of the person'|'TA'
+father.get_chromosome(9)|'Test if the get_chromosome method works and returns a Chromosome object'| Chromosome
+set_up| new_chromosome | father.get_chromosome(9)
+new_chromosome.set_by_pos(20, 'CA') |'Test if the set_by_pos method works for the chromosome object'| NoneType
+father.get_by_pos(9,20)|'Test if the set_by_marker actually changes the genome of the person'|'CA'
+father.set_chromosome(10, new_chromosome) |'test the method set_chromosome'| NoneType
+father.get_by_pos(10, 20) |'test whether the set_chromosome method changed the genome of the person'| 'CA'
+set_up | chromo1 | Chromosome()
+chromo1.set_by_pos(0,'AG') | 'Assign nucelotides to the chromosome' | Nonetype
+chromo1.get_pos(0) | 'Try to retrieve the nucleotides at pos 0 to see if set_by_pos works' | 'AG'
+set_up | mother | Female('rs1234')
+mother.set_by_pos(0,0,'AT') | 'Assign nucleotides to a position in the mother's gene'| NoneType
+mother.set_by_pos(0,1,'CG') | 'Assign nucleotides to a position in the mother's gene'| NoneType
+mother.set_by_pos(0,2,'TG') | 'Assign nucleotides to a position in the mother's gene'| NoneType
+mother.set_by_pos(0,3,'TT') | 'Assign nucleotides to a position in the mother's gene'| NoneType
+set_up| father | Male('rs1234')
+father.set_by_pos(0,0,'CG') | 'Assign nucleotides to a position in the father's gene'| NoneType
+father.set_by_pos(0,1,'AG') | 'Assign nucleotides to a position in the father's gene'| NoneType
+father.set_by_pos(0,2,'GG') | 'Assign nucleotides to a position in the father's gene'| NoneType
+father.set_by_pos(0,3,'CG') | 'Assign nucleotides to a position in the father's gene'| NoneType
+set_up | binder | Binder()
+binder.set_by_pos(0,0,'LM') | 'choose whether the position is LM or RM '| NoneType
+binder.set_by_pos(0,1,'LM') | 'choose whether the position is LM or RM '| NoneType
+binder.set_by_pos(0,2,'RM') | 'choose whether the position is LM or RM '| NoneType
+binder.set_by_pos(0,3,'LM') | 'choose whether the position is LM or RM '| NoneType
+binder.set_sex('F') |'Set the sex for the binder' | NoneType
+mother.procreate(father, binder) | 'use the procreate method to make a new child' | Female
+set_up | child | mother.procreate(father, binder)
+child.get_by_pos(0,0) |'Test whether the right nucleotides are assigned to the child's gene'| 'AG'
+child.get_by_pos(0,1) |'Test whether the right nucleotides are assigned to the child's gene'| 'CG'
+child.get_by_pos(0,2) |'Test whether the right nucleotides are assigned to the child's gene'| 'GG'
+child.get_by_pos(0,3) |'Test whether the right nucleotides are assigned to the child's gene'| 'TG'
+set_up | father | Male('rs1234')
+set_up | mother | Female('rs1234')
+set_up | query | Query()
+query.set_by_pos(0, 0, 'CG') | 'Assign nucleotides to a position in the query'| NoneType
+father.test(query) | 'Query the a perosn's gene when there is no info about the person'| True
+father.set_by_pos(0,0,'CG') | 'Assign nucleotides to a position in the father's gene'| NoneType
+father.set_by_pos(0,1,'AG') | 'Assign nucleotides to a position in the father's gene'| NoneType
+father.set_by_pos(0,2,'GG') | 'Assign nucleotides to a position in the father's gene'| NoneType
+father.set_by_pos(0,3,'CG') | 'Assign nucleotides to a position in the father's gene'| NoneType
+query.set_by_pos(0, 0, 'CG') | 'Assign nucleotides to a position in the query'| NoneType
+father.test(query) | 'Test the position that is assigned to the nucleotides where the positions match' | True
+query.set_by_pos(0, 0, 'TG') | 'Assign nucleotides to a position in the query'| NoneType
+father.test(query) | 'Test the position that is assigned to the nucleotides where the positions don't match' | False
+query.set_by_pos(0,0,'C1') | Assign Memory nucleotides to the query | Nonetype
+query.set_by_pos(0,1,'A1') | Assign Memory nucleotides to the query | Nonetype
+query.set_by_pos(0,2,'11') | Assign Memory nucleoides to the query | Nonetype
+father.test(query) | 'Test the position that is assigned to the nucleotides with only one memory nucleotide' | True
+query.set_by_pos(0,0,'21') | Assign Memory nucleotides to the query | Nonetype
+query.set_by_pos(0,1,'A1') | Assign Memory nucleotides to the query | Nonetype
+query.set_by_pos(0,2,'11') | Assign Memory nucleoides to the query | Nonetype
+query.set_by_pos(0,3,'21') | Assign Memory nucleoides to the query | Nonetype
+father.test(query) | 'Test the position that is assigned to the nucleotides with different memory nucleotides' | True
+query.set_by_pos(0,0,'21') | Assign Memory nucleotides to the query | Nonetype
+query.set_by_pos(0,1,'A1') | Assign Memory nucleotides to the query | Nonetype
+query.set_by_pos(0,2,'21') | Assign Memory nucleoides to the query | Nonetype
+query.set_by_pos(0,3,'21') | Assign Memory nucleoides to the query | Nonetype
+father.test(query) | 'Test the position that is assigned to the nucleotides with different memory nucleotides that don't match their value' | False
+set_up | query1 | Query()
+query.set_by_pos(0,0,'21') | Assign Memory nucleotides to the query | Nonetype
+query.set_by_pos(0,1,'A1') | Assign Memory nucleotides to the query | Nonetype
+query.set_by_pos(0,2,'11') | Assign Memory nucleoides to the query | Nonetype
+query.set_by_pos(0,3,'21') | Assign Memory nucleoides to the query | Nonetype
+father.test(query1) | 'Test case where postition defined in the query but are not defined in the person ' | True
+father.set_by_pos(22,3,'CG') | 'Assign nucleotides to the sex chromosome of the male' | NoneType
+query.set_by_pos(22,3,'CG') | Assign Memory nucleoides to the query | Nonetype
+father.test(query1) | 'Test case where postitions match at the 23rd chromosome of the Male and query' | True
+father.set_by_pos(22,3,'AG') | 'Assign nucleotides to the sex chromosome of the male' | NoneType
+father.test(query1) | 'Test case where postitions do not match at the 23rd chromosome of the Male and query' | False
+query.set_by_pos(22,0,'CG') | Assign Memory nucleoides to the query | Nonetype
+father.test(query1) | 'Test case where the position is defined for the query but not the Male at the 23 chromosome' | False
+mother.test(query1) | 'query the positions of a Female where the 23 chromosome is not defined' | True
+mother.set_by_pos(22, 0, 'CG') | 'Assign nucleotides to the sex chromosome of the Female' | NoneType
+mother.set_by_pos(22, 3, 'CG') | 'Assign nucleotides to the sex chromosome of the Female' | NoneType
+mother.test(query1) | 'query the positions where the positions match | True
+mother.set_by_pos(22, 3, 'CC') | 'Assign nucleotides to the sex chromosome of the Female' | NoneType
+mother.test(query1) | 'query the positions where the positions don't match | False
+set_up | father | Male('rs1234')
+set_up | query | Query()
+query.set_by_pos(0, 0, 'CG') | 'Assign nucleotides to a position in the query'| NoneType
+father.set_by_pos(0,0,'CG') | 'Assign nucleotides to a position in the father's gene'| NoneType
+father.set_by_pos(0,1,'GC') | 'Assign nucleotides to a position in the father's gene'| NoneType
+query.set_by_pos(0,1,'GC') | 'Assign nucleotides to a position in the father's gene'| NoneType
+father.test(query) | 'Test whether pair 0, position 0 is the reverse of pair 0, position 1' | True
+query.set_by_pos(0, 0, '12') | 'Assign nucleotides to a position in the query'| NoneType
+father.set_by_pos(0,0,'CG') | 'Assign nucleotides to a position in the father's gene'| NoneType
+father.set_by_pos(0,1,'GC') | 'Assign nucleotides to a position in the father's gene'| NoneType
+query.set_by_pos(0,1,'21') | 'Assign nucleotides to a position in the father's gene'| NoneType
+father.test(query) | 'Test whether pair 0, position 0 is the reverse of pair 0, position 1 using normal nucleotides' | True
+father.set_by_pos(1,1,'GC') | 'Assign nucleotides to a position in the father's gene'| NoneType
+query.set_by_pos(1,1,'21') | 'Assign nucleotides to a position in the father's gene'| NoneType
+father.test(query) | 'Test whether pair 1, position 1 is the reverse of pair 0, position 1 using normal nucleotides' | True
+father.set_by_pos(1,1,'CC') | 'Assign nucleotides to a position in the father's gene'| NoneType
+father.test(query) | 'Test whether pair 1, position 1 is the reverse of pair 0, position 1 using normal nucleotides' | False
